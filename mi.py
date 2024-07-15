@@ -1,5 +1,4 @@
 import streamlit as st
-
 from db import execute_query
 #option menu
 import pandas as pd
