@@ -30,16 +30,6 @@ connection_string = (
 
 # Crear el motor de SQLAlchemy
 engine = create_engine(connection_string)
-
-# Función para ejecutar una consulta y devolver un DataFrame
-def execute_query(query):
-    try:
-        with engine.connect() as conn:
-            df = pd.read_sql(query, conn)
-            return df
-    except Exception as e:
-        print(f"Error en la conexión: {e}")
-        return None
 #-----------------------------------------------------------------------------------------------------------#
 pd.set_option('future.no_silent_downcasting', True)
 
@@ -49,21 +39,15 @@ st.set_page_config(layout="wide")
 
 
 # Departamentos:
-query_departamentos="""
-select * from CatDepartamentos;
-"""
+query_departamentos="""select * from CatDepartamentos;"""
 departamentos = pd.read_sql(query_departamentos, engine)
 
 #Empresas:
-query_empresas="""
-select * from CatEmpresas;
-"""
+query_empresas="""select * from CatEmpresas;"""
 df_empresas = pd.read_sql_(query_empresas, engine)
 
 #Sedes
-query_sedes="""
-select * from CatSedes;
-"""
+query_sedes="""select * from CatSedes;"""
 df_sede = pd.read_sql(query_sedes, engine)
 
 
@@ -121,10 +105,8 @@ with col3:
     datos_filtrados_dep = datos_filtrados_sede[datos_filtrados_sede['Nombre_dep'] == dep]
 
 #*--------------------------------------------------------------------------------Horario
-query_CAtEmpleado="""
-        select * from CatEmpleados;
-        """
-horaa = execute_query(query_CAtEmpleado)
+query_CAtEmpleado="""select * from CatEmpleados;"""
+horaa = pd.read_sql_(query_CAtEmpleado, engine)
 
 
 #Seleccion de Filtro--------
@@ -154,8 +136,7 @@ hora=horaa['FechaAlta'][(horaa['FechaAlta'] >= date1) & (horaa['FechaAlta']<= da
 query_asistencia="""
 select * from vBitAsistencias;
 """
-bit_asistencia = execute_query(query_asistencia)
-
+bit_asistencia = pd.read_sql_(query_asistencia, engine)
 #Seleccion de Filtro--------
 datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
 # Filtrar df_bit_asistencia según los datos finales seleccionados
