@@ -1,0 +1,7 @@
+requests>=2.25.0
+matplotlib
+numerize
+streamlit_extras
+altair
+sqlalchemy
+pyodbc
