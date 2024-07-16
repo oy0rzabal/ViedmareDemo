@@ -12,6 +12,7 @@ from db import execute_query
 import pandas as pd
 import sqlalchemy
 from sqlalchemy import create_engine
+from urllib.parse import quote_plus
 
 import pyodbc
 
