@@ -1,11 +1,46 @@
-
+import matplotlib.pyplot as plt
 import streamlit as st
 from streamlit_extras.metric_cards import style_metric_cards
-
+import numpy as np
+from numerize.numerize import numerize
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.subplots as sp
+import altair as alt
 from db import execute_query
 #option menu
 import pandas as pd
+import sqlalchemy
+from sqlalchemy import create_engine
 
+import pyodbc
+
+#-----------------------------------------------------------------------------------------------------------#
+# Configuración de la conexión
+server = '52.177.20.85'
+database = 'VIEDMARE_CLOCK_QA'
+username = 'su'
+password = 'Oyorzabal1906'
+driver = 'ODBC Driver 18 for SQL Server'
+
+# Crear la cadena de conexión usando SQLAlchemy
+connection_string = (
+    f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver={driver}&TrustServerCertificate=yes"
+)
+
+# Crear el motor de SQLAlchemy
+engine = create_engine(connection_string)
+
+# Función para ejecutar una consulta y devolver un DataFrame
+def execute_query(query):
+    try:
+        with engine.connect() as conn:
+            df = pd.read_sql(query, conn)
+            return df
+    except Exception as e:
+        print(f"Error en la conexión: {e}")
+        return None
+#-----------------------------------------------------------------------------------------------------------#
 pd.set_option('future.no_silent_downcasting', True)
 
 from streamlit_option_menu import option_menu
