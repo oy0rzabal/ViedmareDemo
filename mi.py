@@ -52,7 +52,7 @@ st.set_page_config(layout="wide")
 query_departamentos="""
 select * from CatDepartamentos;
 """
-departamentos = pd.read_sql_query(query_departamentos, execute_query)
+departamentos = pd.read_sql_query(query_departamentos, engine)
 
 #Empresas:
 query_empresas="""
