@@ -46,25 +46,25 @@ pd.set_option('future.no_silent_downcasting', True)
 from streamlit_option_menu import option_menu
 theme_plotly=None #or you can use streamlit theme
 st.set_page_config(layout="wide")
+
+
 # Departamentos:
 query_departamentos="""
 select * from CatDepartamentos;
 """
-departamentos = execute_query(query_departamentos)
+departamentos = pd.read_sql_query(query_departamentos, execute_query)
 
 #Empresas:
 query_empresas="""
 select * from CatEmpresas;
 """
-df_empresas = execute_query(query_empresas)
-
-
+df_empresas = pd.read_sql_query(query_empresas,execute_query)
 
 #Sedes
 query_sedes="""
 select * from CatSedes;
 """
-df_sede = execute_query(query_sedes)
+df_sede = pd.read_sql_query(query_sedes,execute_query)
 
 
 # Unir los DataFrames
