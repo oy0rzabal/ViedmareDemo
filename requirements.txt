@@ -6,3 +6,4 @@ altair
 sqlalchemy
 pyodbc
 plotly
+streamlit_option_menu
