@@ -52,19 +52,19 @@ st.set_page_config(layout="wide")
 query_departamentos="""
 select * from CatDepartamentos;
 """
-departamentos = pd.read_sql_query(query_departamentos, engine)
+departamentos = pd.read_sql(query_departamentos, engine)
 
 #Empresas:
 query_empresas="""
 select * from CatEmpresas;
 """
-df_empresas = pd.read_sql_query(query_empresas, engine)
+df_empresas = pd.read_sql_(query_empresas, engine)
 
 #Sedes
 query_sedes="""
 select * from CatSedes;
 """
-df_sede = pd.read_sql_query(query_sedes, engine)
+df_sede = pd.read_sql(query_sedes, engine)
 
 
 # Unir los DataFrames
