@@ -39,15 +39,15 @@ st.set_page_config(layout="wide")
 
 
 # Departamentos:
-query_departamentos="""select * from CatDepartamentos;"""
+query_departamentos="select * from CatDepartamentos;"
 departamentos = pd.read_sql(engine, query_departamentos)
 
 #Empresas:
-query_empresas="""select * from CatEmpresas;"""
+query_empresas="select * from CatEmpresas;"
 df_empresas = pd.read_sql_(query_empresas, engine)
 
 #Sedes
-query_sedes="""select * from CatSedes;"""
+query_sedes="select * from CatSedes;"
 df_sede = pd.read_sql(query_sedes, engine)
 
 
