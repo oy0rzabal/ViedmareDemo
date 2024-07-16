@@ -25,7 +25,8 @@ driver = 'ODBC+Driver+18+for+SQL+Server'
 
 # Crear la cadena de conexión usando SQLAlchemy
 connection_string = (
-    f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver={driver}&TrustServerCertificate=yes"
+    f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver={driver}"
+    "&TrustServerCertificate=yes"
 )
 
 # Crear el motor de SQLAlchemy
