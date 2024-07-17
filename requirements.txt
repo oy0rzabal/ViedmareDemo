@@ -7,4 +7,3 @@ sqlalchemy
 pyodbc
 plotly
 streamlit_option_menu
-urllib.parse
