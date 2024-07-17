@@ -24,8 +24,8 @@ username = 'su'
 password = 'Oyorzabal1906'
 driver = 'ODBC Driver 18 for SQL Server'
 
-# Crear la cadena de conexión usando SQLAlchemy con urllib.parse.quote_plus para codificar los componentes
-connection_string = f"mssql+pyodbc://{quote_plus(username)}:{quote_plus(password)}@{server}/{database}?driver={quote_plus(driver)}&TrustServerCertificate=yes"
+# Crear la cadena de conexión usando SQLAlchemy
+connection_string = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver={driver.replace(' ', '+')}&TrustServerCertificate=yes"
 
 
 # Crear el motor de SQLAlchemy
