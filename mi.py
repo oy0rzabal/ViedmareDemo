@@ -55,28 +55,13 @@ departamentos= pd.DataFrame(departamentos)
 
 # Empresas:
 query_empresas = "select * from CatEmpresas;"
-df_empresas = execute_query(query_empresas)
-df_empresas=  pd.DataFrame(df_empresas)
+empresas = execute_query(query_empresas)
+df_empresas=  pd.DataFrame(empresas)
 
 # Sedes:
 query_sedes = "select * from CatSedes;"
-df_sede = execute_query(query_sedes)
-df_sede= pd.DataFrame(df_sede)
-
-# Verificar que los DataFrames no estén vacíos
-if departamentos is None or df_empresas is None or df_sede is None:
-    raise ValueError("Uno o más DataFrames son None debido a un error en la consulta SQL.")
-
-if departamentos.empty or df_empresas.empty or df_sede.empty:
-    raise ValueError("Uno o más DataFrames están vacíos.")
-
-# Verificar que la columna 'IdEmpresa' esté presente en todos los DataFrames
-if 'IdEmpresa' not in departamentos.columns or 'IdEmpresa' not in df_empresas.columns or 'IdEmpresa' not in df_sede.columns:
-    raise ValueError("La columna 'IdEmpresa' no está presente en uno o más DataFrames.")
-
-# Verificar que la columna 'IdEmpresa' tenga el mismo tipo de dato en todos los DataFrames
-if not all(departamentos['IdEmpresa'].dtype == df[col] for df in [df_empresas, df_sede]):
-    raise TypeError("El tipo de dato de la columna 'IdEmpresa' no coincide en todos los DataFrames.")
+sede = execute_query(query_sedes)
+df_sede = pd.DataFrame(sede)
 
 # Unir los DataFrames
 df_merged = pd.merge(departamentos, df_empresas, on='IdEmpresa', suffixes=('_dep', '_emp'))
