@@ -52,8 +52,8 @@ def execute_query(query):
 query_departamentos = "select * from CatDepartamentos;"
 tables_df = execute_query(query_departamentos)
 csv_file = 'departamentos.csv'
-departamentos= pd.read_csv('departamentos')
 tables_df.to_csv(csv_file, index=False)
+departamentos= pd.read_csv('departamentos')
 
 # Empresas:
 query_empresas = "select * from CatEmpresas;"
