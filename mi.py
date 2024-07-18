@@ -47,16 +47,14 @@ def execute_query(query):
 
 #-----------------------------------------------------------------------------------------------------------#
 
-# Ejecutar la consulta
+# Ejecutar la consulta y obtener los resultados en un DataFrame
 query_departamentos = "select * from CatDepartamentos;"
-results, columns = execute_query(query_departamentos)
-# Converti los resultados a un DataFrame
-df_departamentos = pd.DataFrame(results, columns=columns)
+df_departamentos = pd.DataFrame(execute_query(query_departamentos))
 # Guardar el DataFrame en un archivo CSV
 csv_file = 'departamentos.csv'
 df_departamentos.to_csv(csv_file, index=False)
 # Leer el archivo CSV para verificar
-departamentos = pd.read_csv(csv_file)
+departamentos = pd.read_csv(csv_file))
 
 # Empresas:
 query_empresas = "select * from CatEmpresas;"
