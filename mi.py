@@ -15,7 +15,11 @@ from sqlalchemy import create_engine
 from urllib.parse import quote_plus
 
 import pyodbc
+pd.set_option('future.no_silent_downcasting', True)
 
+from streamlit_option_menu import option_menu
+theme_plotly=None #or you can use streamlit theme
+st.set_page_config(layout="wide")
 #-----------------------------------------------------------------------------------------------------------#
 # Configuración de la conexión
 server = '52.177.20.85'
@@ -30,26 +34,30 @@ connection_string = f"mssql+pyodbc://{username}:{password}@{server}/{database}?d
 
 # Crear el motor de SQLAlchemy
 engine = create_engine(connection_string)
-#-----------------------------------------------------------------------------------------------------------#
-pd.set_option('future.no_silent_downcasting', True)
 
-from streamlit_option_menu import option_menu
-theme_plotly=None #or you can use streamlit theme
-st.set_page_config(layout="wide")
+# Función para ejecutar una consulta y devolver un DataFrame
+def execute_query(query):
+    try:
+        with engine.connect() as conn:
+            df = pd.read_sql(query, conn)
+            return df
+    except Exception as e:
+        print(f"Error en la conexión: {e}")
+        return None
+
+#-----------------------------------------------------------------------------------------------------------#
 
 
 # Departamentos:
 query_departamentos="select * from CatDepartamentos;"
-departamentos = pd.read_sql(engine, query_departamentos)
-
+departamentos = execute_query(query_departamentos)
 #Empresas:
 query_empresas="select * from CatEmpresas;"
-df_empresas = pd.read_sql_(query_empresas, engine)
+df_empresas = execute_query(query_empresas)
 
 #Sedes
 query_sedes="select * from CatSedes;"
-df_sede = pd.read_sql(query_sedes, engine)
-
+df_sede = execute_query(query_sedes)
 
 # Unir los DataFrames
 df_merged = pd.merge(departamentos, df_empresas, on='IdEmpresa', suffixes=('_dep', '_emp'))
