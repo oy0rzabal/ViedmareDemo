@@ -49,7 +49,7 @@ def execute_query(query):
 
 
 # Departamentos:
-query_departamentos = "select * from CatDepartamentos;)
+query_departamentos = "select * from CatDepartamentos;")
 tables_df = execute_query(query_departamentos)
 csv_file = 'departamentos.csv'
 departamentos= pd.read_csv('departamentos')
