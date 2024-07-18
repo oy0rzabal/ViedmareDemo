@@ -54,7 +54,7 @@ df_departamentos = pd.DataFrame(execute_query(query_departamentos))
 csv_file = 'departamentos.csv'
 df_departamentos.to_csv(csv_file, index=False)
 # Leer el archivo CSV para verificar
-departamentos = pd.read_csv(csv_file))
+departamentos = pd.read_csv(csv_file)
 
 # Empresas:
 query_empresas = "select * from CatEmpresas;"
