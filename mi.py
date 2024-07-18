@@ -56,10 +56,12 @@ departamentos= pd.DataFrame(departamentos)
 # Empresas:
 query_empresas = "select * from CatEmpresas;"
 df_empresas = execute_query(query_empresas)
+df_empresas=  pd.DataFrame(df_empresas)
 
 # Sedes:
 query_sedes = "select * from CatSedes;"
 df_sede = execute_query(query_sedes)
+df_sede= pd.DataFrame(df_sede)
 
 # Verificar que los DataFrames no estén vacíos
 if departamentos is None or df_empresas is None or df_sede is None:
