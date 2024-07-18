@@ -51,7 +51,7 @@ def execute_query(query):
 # Departamentos:
 query_departamentos = "select * from CatDepartamentos;"
 departamentos = execute_query(query_departamentos)
- departamentos= pd.DataFrame(departamentos)
+departamentos= pd.DataFrame(departamentos)
 
 # Empresas:
 query_empresas = "select * from CatEmpresas;"
