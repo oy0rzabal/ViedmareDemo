@@ -26,7 +26,7 @@ server = '52.177.20.85'
 database = 'VIEDMARE_CLOCK_QA'
 username = 'su'
 password = 'Oyorzabal1906'
-driver = 'ODBC Driver 18 for SQL Server'
+driver = 'ODBC Driver 17 for SQL Server'
 
 # Crear la cadena de conexión usando SQLAlchemy
 connection_string = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver={driver.replace(' ', '+')}&TrustServerCertificate=yes"
