@@ -49,31 +49,15 @@ def execute_query(query):
 
 # Ejecutar la consulta y obtener los resultados en un DataFrame
 query_departamentos = "select * from CatDepartamentos;"
-df_departamentos = pd.DataFrame(execute_query(query_departamentos))
-# Guardar el DataFrame en un archivo CSV
-csv_filee = 'departamentos.csv'
-df_departamentos.to_csv(csv_filee, index=False)
-# Leer el archivo CSV para verificar
-departamentos = pd.read_csv('departamentos.csv')
+departamentos = pd.DataFrame(execute_query(query_departamentos))
 
 # Empresas:
 query_empresas = "select * from CatEmpresas;"
-df_empresas = pd.DataFrame(execute_query(query_empresas))
-# Guardar el DataFrame en un archivo CSV
-csv_fileee = 'empresas.csv'
-df_empresas.to_csv(csv_fileee, index=False)
-# Leer el archivo CSV para verificar
-empresas = pd.read_csv('empresas.csv')
+empresas = pd.DataFrame(execute_query(query_empresas))
 
 # Sedes:
 query_sedes = "select * from CatSedes;"
-df_sedes = pd.DataFrame(execute_query(query_sedes))
-# Guardar el DataFrame en un archivo CSV
-csv_fileeee = 'sedes.csv'
-df_sedes.to_csv(csv_fileeee, index=False)
-# Leer el archivo CSV para verificar
-sedes = pd.read_csv('sedes.csv')
-
+sedes = pd.DataFrame(execute_query(query_sedes))
 
 # Unir los DataFrames
 df_merged = pd.merge(departamentos, empresas, on='IdEmpresa', suffixes=('_dep', '_emp'))
