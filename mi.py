@@ -38,16 +38,16 @@ engine = create_engine(connection_string)
 #-----------------------------------------------------------------------------------------------------------#
 
 # Ejecutar la consulta y obtener los resultados en un DataFrame
-query_departamentos = "select * from CatDepartamentos;"
-departamentos = pd.DataFrame(engine(query_departamentos))
+query_departamentos = "SELECT * FROM CatDepartamentos;"
+departamentos = pd.read_sql(query_departamentos, engine)
 
 # Empresas:
-query_empresas = "select * from CatEmpresas;"
-empresas = pd.DataFrame(engine(query_empresas))
+query_empresas = "SELECT * FROM CatEmpresas;"
+empresas = pd.read_sql(query_empresas, engine)
 
 # Sedes:
-query_sedes = "select * from CatSedes;"
-sedes = pd.DataFrame(engine(query_sedes))
+query_sedes = "SELECT * FROM CatSedes;"
+sedes = pd.read_sql(query_sedes, engine)
 
 # Unir los DataFrames
 df_merged = pd.merge(departamentos, empresas, on='IdEmpresa', suffixes=('_dep', '_emp'))
