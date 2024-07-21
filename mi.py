@@ -35,29 +35,19 @@ connection_string = f"mssql+pyodbc://{username}:{password}@{server}/{database}?d
 # Crear el motor de SQLAlchemy
 engine = create_engine(connection_string)
 
-# Función para ejecutar una consulta y devolver un DataFrame
-def execute_query(query):
-    try:
-        with engine.connect() as conn:
-            df = pd.read_sql(query, conn)
-            return df
-    except Exception as e:
-        print(f"Error en la conexión: {e}")
-        return None
-
 #-----------------------------------------------------------------------------------------------------------#
 
 # Ejecutar la consulta y obtener los resultados en un DataFrame
 query_departamentos = "select * from CatDepartamentos;"
-departamentos = pd.DataFrame(execute_query(query_departamentos))
+departamentos = pd.DataFrame(engine(query_departamentos))
 
 # Empresas:
 query_empresas = "select * from CatEmpresas;"
-empresas = pd.DataFrame(execute_query(query_empresas))
+empresas = pd.DataFrame(engine(query_empresas))
 
 # Sedes:
 query_sedes = "select * from CatSedes;"
-sedes = pd.DataFrame(execute_query(query_sedes))
+sedes = pd.DataFrame(engine(query_sedes))
 
 # Unir los DataFrames
 df_merged = pd.merge(departamentos, empresas, on='IdEmpresa', suffixes=('_dep', '_emp'))
