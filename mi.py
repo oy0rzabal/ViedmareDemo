@@ -22,13 +22,13 @@ st.set_page_config(layout="wide")
 #-----------------------------------------------------------------------------------------------------------#
 
 # Ejecutar la consulta y obtener los resultados en un DataFrame
-departamentos = pd.read_csv('ViedmareDemo/CatEmpleados.csv')
+departamentos = pd.read_csv('CatEmpleados.csv')
 
 # Empresas:
-empresas = pd.read_csv('ViedmareDemo/CatEmpresas.csv')
+empresas = pd.read_csv('CatEmpresas.csv')
 
 # Sedes:
-sedes = pd.read_csv('ViedmareDemo/CatSedes.csv')
+sedes = pd.read_csv('CatSedes.csv')
 
 
 # Unir los DataFrames
