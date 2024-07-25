@@ -1,3 +1,4 @@
+
 import matplotlib.pyplot as plt
 import streamlit as st
 from streamlit_extras.metric_cards import style_metric_cards
@@ -7,11 +8,10 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.subplots as sp
 import altair as alt
-from db import execute_query
+from db import execute_query, connection_string, create_engine
 #option menu
 import pandas as pd
 import sqlalchemy
-from sqlalchemy import create_engine
 from urllib.parse import quote_plus
 
 import pyodbc
@@ -21,33 +21,19 @@ from streamlit_option_menu import option_menu
 theme_plotly=None #or you can use streamlit theme
 st.set_page_config(layout="wide")
 #-----------------------------------------------------------------------------------------------------------#
-# Configuración de la conexión
-server = '52.177.20.85'
-database = 'VIEDMARE_CLOCK_QA'
-username = 'su'
-password = 'Oyorzabal1906'
-driver = 'ODBC Driver 17 for SQL Server'
-
-# Crear la cadena de conexión usando SQLAlchemy
-connection_string = f"mssql+pyodbc://{username}:{password}@{server}/{database}?driver={driver.replace(' ', '+')}&TrustServerCertificate=yes"
-
-
-# Crear el motor de SQLAlchemy
-engine = create_engine(connection_string)
-
-#-----------------------------------------------------------------------------------------------------------#
 
 # Ejecutar la consulta y obtener los resultados en un DataFrame
-query_departamentos = "SELECT * FROM CatDepartamentos;"
-departamentos = pd.read_sql(query_departamentos, engine)
+query_departamentos = "select * from CatDepartamentos;"
+departamentos = pd.DataFrame(execute_query(query_departamentos))
 
 # Empresas:
-query_empresas = "SELECT * FROM CatEmpresas;"
-empresas = pd.read_sql(query_empresas, engine)
+query_empresas = "select * from CatEmpresas;"
+empresas = pd.DataFrame(execute_query(query_empresas))
 
 # Sedes:
-query_sedes = "SELECT * FROM CatSedes;"
-sedes = pd.read_sql(query_sedes, engine)
+query_sedes = "select * from CatSedes;"
+sedes = pd.DataFrame(execute_query(query_sedes))
+
 
 # Unir los DataFrames
 df_merged = pd.merge(departamentos, empresas, on='IdEmpresa', suffixes=('_dep', '_emp'))
@@ -55,45 +41,53 @@ df_merged = pd.merge(df_merged, sedes, on='IdEmpresa', suffixes=('', '_sede'))
 
 #--------------------------------------------------------------------------------------------------#
 
-def login(username, password, idempresa):
-    # Crear una consulta para verificar el usuario y la contraseña
+# Función de login
+def login(username, password):
     query = f"""
-    SELECT * FROM CatOperadores
-    WHERE Usuario = '{username}' AND Password = '{password}' AND IdEmpresa= '{idempresa}'
+    SELECT 
+        co.Usuario,
+        co.Password,
+        ce.Nombre AS NombreEmpresa,
+        co.IdStatus
+    FROM 
+        CatOperadores co
+    JOIN 
+        CatEmpresas ce ON co.IdEmpresa = ce.IdEmpresa
+    WHERE 
+        co.Usuario = '{username}' AND 
+        co.Password = '{password}';
     """
     
+    # Crear el motor de SQLAlchemy
+    engine = create_engine(connection_string)
     # Ejecutar la consulta
     df = pd.read_sql(query, engine)
-    
-    # Verificar si se encontró un registro que coincida
     if not df.empty:
-        return True
+        user_data = df.iloc[0]
+        if user_data['IdStatus']:  # Asegúrate de que el estado sea True
+            return user_data
+        else:
+            return None
     else:
-        return False
-
-
-
+        return None
+    
 # Mantener el estado de autenticación
 if 'authenticated' not in st.session_state:
     st.session_state['authenticated'] = False
+if 'user_data' not in st.session_state:
+    st.session_state['user_data'] = None
 
-if not st.session_state['authenticated']:
-    # Streamlit UI
-    st.title("Login")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+if st.session_state['authenticated']:
+    # Mostrar el contenido del dashboard
+    st.subheader("Welcome to the dashboard!")
+    
+    # Botón de salida
+    if st.button("Logout"):
+        st.session_state['authenticated'] = False
+        st.session_state['user_data'] = None
+        st.success("You have been logged out.")
 
-    if st.button("Login"):
-        if login(username, password):
-            st.session_state['authenticated'] = True
-            st.success("Login successful!")
-        else:
-            st.error("Invalid username or password.")
-else:
-       # Filtrar los datos según el IdEmpresa del usuario autenticado
-    id_empresa = st.session_state['id_empresa']
-    df_filtered = df_merged[df_merged['IdEmpresa'] == id_empresa]
-
+    # Aquí puedes continuar con el resto de tu código para mostrar el contenido
     # Contenido del dashboard
     st.subheader("📈 Business Analytics Dashboard")
     selected = option_menu(
@@ -105,19 +99,25 @@ else:
         orientation="horizontal",
     )
 
+    # Obtener IdEmpresa y Nombre del usuario autenticado
+ # Obtener los datos del usuario autenticado
+    user_data = st.session_state['user_data']
+
+    # Extraer NombreEmpresa y Filtro 
+    NombreEmpresa = user_data['NombreEmpresa']
+    df_merged = df_merged[df_merged['Nombre_emp'] == NombreEmpresa]
     # Entrada de texto para buscar en las columnas Nombre_dep y Nombre_pues
     search_term = st.text_input('Buscar:')
 
-    # Filtrar los datos según el término de búsqueda
+    # Filtrar los datos según el término de búsqueda y el IdEmpresa del usuario autenticado
     if search_term:
         filtered_df = df_merged[
-            (df_merged['Nombre_dep'].str.contains(search_term, case=False, na=False)) |
+            ((df_merged['Nombre_dep'].str.contains(search_term, case=False, na=False)) |
             (df_merged['Nombre'].str.contains(search_term, case=False, na=False)) |
-            (df_merged['Nombre_emp'].str.contains(search_term, case=False, na=False))
+            (df_merged['Nombre_emp'].str.contains(search_term, case=False, na=False)))
         ]
     else:
         filtered_df = df_merged
-
     # Crear columnas para los selectbox
     col1, col2, col3 = st.columns(3)
 
@@ -525,3 +525,21 @@ else:
             # Reportes por Mes- graficas de Lineas
             # Proporcion de Consultas por Tipo - Barra Circulas #Echa
             # Altas y Bjas por Mes - Barras
+
+
+#---------------------------------------------------------------------------------------------·#
+#Salida del Inicio de Sesion:
+else:
+    # Streamlit UI para login
+    st.title("Login")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+
+    if st.button("Login"):
+        user_data = login(username, password)
+        if user_data is not None:
+            st.session_state['authenticated'] = True
+            st.session_state['user_data'] = user_data
+            st.success("Login successful!")
+        else:
+            st.error("Invalid username or password, or inactive status.")
