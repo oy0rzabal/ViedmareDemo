@@ -172,11 +172,8 @@ else:
     hora=horaa['FechaAlta'][(horaa['FechaAlta'] >= date1) & (horaa['FechaAlta']<= date2)].copy()
 
     #*--------------------------------------------------------------------------------Horario
-    #BitAsistencia
-    query_asistencia="""
-    select * from vBitAsistencias;
-    """
-    bit_asistencia = execute_query(query_asistencia)
+    
+    bit_asistencia = pd.read_csv('vBitAsistencias.csv')
 
     #Seleccion de Filtro--------
     datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
