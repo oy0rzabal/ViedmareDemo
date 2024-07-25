@@ -37,9 +37,10 @@ df_merged = pd.merge(df_merged, sedes, on='IdEmpresa', suffixes=('', '_sede'))
 
 #--------------------------------------------------------------------------------------------------#
 # Función de login
+df='CatOperadores.csv'
 def login(username, password):
     # Leer el archivo CSV
-    df = pd.read_csv(csv_file_path)
+    df = pd.read_csv(df)
     
     # Filtrar el DataFrame para encontrar el usuario
     user_data = df[(df['Usuario'] == username) & (df['Password'] == password)]
