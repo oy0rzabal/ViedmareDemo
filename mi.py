@@ -147,12 +147,8 @@ else:
         datos_filtrados_dep = datos_filtrados_sede[datos_filtrados_sede['Nombre_dep'] == dep]
 
     #*--------------------------------------------------------------------------------Horario
-    query_CAtEmpleado="""
-            select * from CatEmpleados;
-            """
-    horaa = execute_query(query_CAtEmpleado)
-
-
+    
+    horaa = pd.read_csv('CatEmpleados.csv')
     #Seleccion de Filtro--------
     datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
     # Filtrar df_bit_asistencia según los datos finales seleccionados
