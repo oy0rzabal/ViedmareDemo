@@ -25,12 +25,10 @@ st.set_page_config(layout="wide")
 departamentos = pd.read_csv('ViedmareDemo/CatEmpleados.csv')
 
 # Empresas:
-query_empresas = "select * from CatEmpresas;"
-empresas = pd.DataFrame(execute_query(query_empresas))
+empresas = pd.read_csv('ViedmareDemo/CatEmpresas.csv')
 
 # Sedes:
-query_sedes = "select * from CatSedes;"
-sedes = pd.DataFrame(execute_query(query_sedes))
+sedes = pd.read_csv('ViedmareDemo/CatSedes.csv')
 
 
 # Unir los DataFrames
