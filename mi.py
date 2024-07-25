@@ -8,7 +8,6 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.subplots as sp
 import altair as alt
-from db import execute_query, connection_string, create_engine
 #option menu
 import pandas as pd
 import sqlalchemy
@@ -23,8 +22,7 @@ st.set_page_config(layout="wide")
 #-----------------------------------------------------------------------------------------------------------#
 
 # Ejecutar la consulta y obtener los resultados en un DataFrame
-query_departamentos = "select * from CatDepartamentos;"
-departamentos = pd.DataFrame(execute_query(query_departamentos))
+departamentos = pd.read_csv('ViedmareDemo/CatEmpleados.csv')
 
 # Empresas:
 query_empresas = "select * from CatEmpresas;"
