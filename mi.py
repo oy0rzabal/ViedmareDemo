@@ -36,46 +36,56 @@ df_merged = pd.merge(departamentos, empresas, on='IdEmpresa', suffixes=('_dep', 
 df_merged = pd.merge(df_merged, sedes, on='IdEmpresa', suffixes=('', '_sede'))
 
 #--------------------------------------------------------------------------------------------------#
-
 # Función de login
 def login(username, password):
-    query = f"""
-    SELECT 
-        co.Usuario,
-        co.Password,
-        ce.Nombre AS NombreEmpresa,
-        co.IdStatus
-    FROM 
-        CatOperadores co
-    JOIN 
-        CatEmpresas ce ON co.IdEmpresa = ce.IdEmpresa
-    WHERE 
-        co.Usuario = '{username}' AND 
-        co.Password = '{password}';
-    """
+    # Leer el archivo CSV
+    df = pd.read_csv(csv_file_path)
     
-    # Crear el motor de SQLAlchemy
-    engine = create_engine(connection_string)
-    # Ejecutar la consulta
-    df = pd.read_sql(query, engine)
-    if not df.empty:
-        user_data = df.iloc[0]
+    # Filtrar el DataFrame para encontrar el usuario
+    user_data = df[(df['Usuario'] == username) & (df['Password'] == password)]
+    
+    if not user_data.empty:
+        user_data = user_data.iloc[0]
         if user_data['IdStatus']:  # Asegúrate de que el estado sea True
+            # Añadir la columna de NombreEmpresa desde el CSV CatEmpresas
+            empresas_df = pd.read_csv(empresas_file_path)
+            empresa_data = empresas_df[empresas_df['IdEmpresa'] == user_data['IdEmpresa']]
+            
+            if not empresa_data.empty:
+                user_data['NombreEmpresa'] = empresa_data.iloc[0]['Nombre']
             return user_data
         else:
             return None
     else:
         return None
-    
+
 # Mantener el estado de autenticación
 if 'authenticated' not in st.session_state:
     st.session_state['authenticated'] = False
 if 'user_data' not in st.session_state:
     st.session_state['user_data'] = None
 
-if st.session_state['authenticated']:
+# Interfaz de inicio de sesión
+if not st.session_state['authenticated']:
+    st.title("Login")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+    
+    if st.button("Login"):
+        user_data = login(username, password)
+        if user_data is not None:
+            st.session_state['authenticated'] = True
+            st.session_state['user_data'] = user_data
+            st.success("Login successful!")
+        else:
+            st.error("Invalid username or password.")
+else:
     # Mostrar el contenido del dashboard
     st.subheader("Welcome to the dashboard!")
+    user_data = st.session_state['user_data']
+    
+    st.write(f"Username: {user_data['Usuario']}")
+    st.write(f"Company Name: {user_data['NombreEmpresa']}")
     
     # Botón de salida
     if st.button("Logout"):
