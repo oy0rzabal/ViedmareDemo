@@ -204,12 +204,7 @@ else:
 
     # #-------------------------------------------------------------------------Numero de Empledos = Primera Tira de Graficas
 
-
-
-    query_CAtEmpleado="""
-    select * from CatEmpleados;
-    """
-    hora2 = execute_query(query_CAtEmpleado)
+    hora2 = pd.read_csv('CatEmpleados.csv')
 
     # Función para gráficos de pie y barras
     def gra1():
@@ -320,10 +315,8 @@ else:
     def gra2():
         d1,d2 = st.columns(2)
         with d1:
-            query_CAtEmpleado="""
-            select * from CatEmpleados;
-            """
-            Emle1 = execute_query(query_CAtEmpleado)
+            
+            Emle1 = pd.read_csv('CatEmpleados.csv')
 
             #Obtenemos los Filtros:
             datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
@@ -388,10 +381,7 @@ else:
     def gra3():
         gr1, gr2 = st.columns(2)
         with gr1:
-            query_CAtEmpleado = """
-            select * from CatEmpleados;
-            """
-            CtEmpleadod = execute_query(query_CAtEmpleado)
+            CtEmpleadod = pd.read_csv('CatEmpleados.csv')
 
             datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
             empleados_ids = datos_filtrados_dep['IdDepartamento'].unique()
@@ -417,12 +407,8 @@ else:
             st.write(status_counts_pivot)
 
         with gr2:
-            query_CAtEmpleado = """
-            select * from CatEmpleados;
-            """
-
             # Suponiendo que ya has ejecutado la consulta y tienes el DataFrame CAEmpleado
-            CAEmpleado = execute_query(query_CAtEmpleado)
+            CAEmpleado =pd.read_csv('CatEmpleados.csv')
 
             datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
             empleados_ids = datos_filtrados_dep['IdDepartamento'].unique()
