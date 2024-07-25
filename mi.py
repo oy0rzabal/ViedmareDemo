@@ -175,7 +175,7 @@ else:
     bit_asistencia = bit_asistencia[bit_asistencia['IdDepartamento'].isin(empleados_ids)]
 
     #FiltrodeFechas
-    bit_asistencia['Fecha'] = pd.to_datetime(bit_asistencia['Fecha'], format='%d/%m/%Y')
+    bit_asistencia['Fecha'] = pd.to_datetime(bit_asistencia['Fecha'], errors='coerce')
     bit_asistencia = bit_asistencia[
         (bit_asistencia['Fecha'] >= date1) & (bit_asistencia['Fecha'] <= date2)
     ]
