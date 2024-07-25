@@ -487,13 +487,13 @@ else:
 
     # #------------------------------------------------------------------------------Incidencias Numero
 
-    # #Incidencias por Mes
-    #Retorno de las Funciones de los Graficos:
-    if selected=="Home":
-        gra1()
-        gra2()
-        gra3()
-        gra4()
+        # #Incidencias por Mes
+        #Retorno de las Funciones de los Graficos:
+        if selected=="Home":
+            gra1()
+            gra2()
+            gra3()
+            gra4()
 
                 #Graficas:
             #     Incidecias por Mes . barras verticales #Echa
