@@ -49,7 +49,7 @@ def login(username, password):
         user_data = user_data.iloc[0]
         if user_data['IdStatus']:  # Asegúrate de que el estado sea True
             # Añadir la columna de NombreEmpresa desde el CSV CatEmpresas
-            empresas_df = pd.read_csv(empresas_file_path)
+            empresas_df = pd.read_csv('CatEmpresas.csv')
             empresa_data = empresas_df[empresas_df['IdEmpresa'] == user_data['IdEmpresa']]
             
             if not empresa_data.empty:
