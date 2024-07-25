@@ -536,17 +536,4 @@ else:
 
 #---------------------------------------------------------------------------------------------·#
 #Salida del Inicio de Sesion:
-else:
-    # Streamlit UI para login
-    st.title("Login")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
 
-    if st.button("Login"):
-        user_data = login(username, password)
-        if user_data is not None:
-            st.session_state['authenticated'] = True
-            st.session_state['user_data'] = user_data
-            st.success("Login successful!")
-        else:
-            st.error("Invalid username or password, or inactive status.")
