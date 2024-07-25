@@ -81,13 +81,6 @@ if not st.session_state['authenticated']:
         else:
             st.error("Invalid username or password.")
 else:
-    # Mostrar el contenido del dashboard
-    st.subheader("Welcome to the dashboard!")
-    user_data = st.session_state['user_data']
-    
-    st.write(f"Username: {user_data['Usuario']}")
-    st.write(f"Company Name: {user_data['NombreEmpresa']}")
-    
     # Botón de salida
     if st.button("Logout"):
         st.session_state['authenticated'] = False
