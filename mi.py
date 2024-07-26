@@ -22,7 +22,7 @@ st.set_page_config(layout="wide")
 #-----------------------------------------------------------------------------------------------------------#
 
 # Ejecutar la consulta y obtener los resultados en un DataFrame
-departamentos = pd.read_csv('CatEmpleados.csv')
+departamentos = pd.read_csv('CatDepartamentos.csv')
 
 # Empresas:
 empresas = pd.read_csv('CatEmpresas.csv')
