@@ -210,7 +210,6 @@ else:
 
     # #-------------------------------------------------------------------------Numero de Empledos = Primera Tira de Graficas
 
-    hora2 = pd.read_csv('CatEmpleados.csv')
 
     # Función para gráficos de pie y barras
     def gra1():
@@ -233,7 +232,7 @@ else:
             
 
             # Contar las calificaciones
-            conteos1 = df_bit_asistencia1['Calificacion'].value_counts().to_dict()
+            st.write(df_bit_asistencia1['Calificacion'].value_counts().to_dict())
 
             # Asegurar que todos los tipos de calificación estén presentes en el diccionario
             conteos_completos = {'Asistencia': 0, 'Falta': 0, 'Descanso': 0}
