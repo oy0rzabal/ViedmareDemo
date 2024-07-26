@@ -273,10 +273,8 @@ else:
         # Gráfico de barras simple Incidencias por Mes
         with div2:
             # CIncidencias
-            query_BitIncidencias="""
-                    select * from vBitIncidencias;
-                    """
-            df_bitinicidencias1 = execute_query(query_BitIncidencias)
+           
+            df_bitinicidencias1 = pd.read_csv('vBitIncidencias.csv')
 
 
             # Sincronizamos las fechas:
