@@ -253,8 +253,8 @@ else:
                 df_consultas,
                 names='Tipo',
                 values='Cantidad',
-                title='Tipo de ',
-                labels={'Cantidad': 'Número de Consultas', 'Tipo': 'Cantidad'}
+                title='Tipo Consultas',
+                labels={'Cantidad': 'Número:', 'Tipo': 'Cantidad'}
             )
 
         
