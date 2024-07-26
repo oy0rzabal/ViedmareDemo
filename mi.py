@@ -217,7 +217,7 @@ else:
         div1,div2 = st.columns(2)
         # Gráfico circular en la primera columna
         with div1:
-            df_bit_asistencia1 = pd.read_csv('vBitAsistencias.csv')
+            st.write(pd.read_csv('vBitAsistencias.csv'))
 
             datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
             # Filtrar df_bit_asistencia según los datos finales seleccionados
