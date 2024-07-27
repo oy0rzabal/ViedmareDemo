@@ -1,4 +1,3 @@
-
 import matplotlib.pyplot as plt
 import streamlit as st
 from streamlit_extras.metric_cards import style_metric_cards
@@ -106,7 +105,7 @@ else:
             st.success("You have been logged out.")
     
     # Obtener IdEmpresa y Nombre del usuario autenticado
- # Obtener los datos del usuario autenticado
+# Obtener los datos del usuario autenticado
     user_data = st.session_state['user_data']
 
     # Extraer NombreEmpresa y Filtro 
@@ -217,7 +216,7 @@ else:
         div1,div2 = st.columns(2)
         # Gráfico circular en la primera columna
         with div1:
-            st.write(pd.read_csv('vBitAsistencias.csv'))
+            df_bit_asistencia1=pd.read_csv('vBitAsistencias.csv')
 
             datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
             # Filtrar df_bit_asistencia según los datos finales seleccionados
@@ -225,14 +224,14 @@ else:
             df_bit_asistencia1 = df_bit_asistencia1[df_bit_asistencia1['IdDepartamento'].isin(empleados_ids)]
 
             # Sincronizamos las fechas:
-            df_bit_asistencia1['Fecha'] = pd.to_datetime(df_bit_asistencia1['Fecha'], format='%d/%m/%Y')
+            df_bit_asistencia1['Fecha'] = df_bit_asistencia1['Fecha'] = pd.to_datetime(df_bit_asistencia1['Fecha'])
             df_bit_asistencia1 = df_bit_asistencia1[
                 (df_bit_asistencia1['Fecha'] >= date1) & (df_bit_asistencia1['Fecha'] <= date2)
             ]
             
 
             # Contar las calificaciones
-            st.write(df_bit_asistencia1['Calificacion'].value_counts().to_dict())
+            conteos1 = df_bit_asistencia1['Calificacion'].value_counts().to_dict()
 
             # Asegurar que todos los tipos de calificación estén presentes en el diccionario
             conteos_completos = {'Asistencia': 0, 'Falta': 0, 'Descanso': 0}
@@ -253,14 +252,14 @@ else:
                 names='Tipo',
                 values='Cantidad',
                 title='Tipo Consultas',
-                labels={'Cantidad': 'Número:', 'Tipo': 'Cantidad'}
+                labels={'Cantidad': 'Número de Consultas', 'Tipo': 'Cantidad'}
             )
 
         
 
             fig.update_layout(
                 title_font_size=24,
-                legend_title='Consultas',
+                legend_title='Cantidad',
                 legend_font_size=14,
                 width=400,  # Ajustar el ancho de la gráfica
                 height=600  # Ajustar el alto de la gráfica
@@ -277,7 +276,7 @@ else:
 
 
             # Sincronizamos las fechas:
-            df_bitinicidencias1['FechaAlta'] = pd.to_datetime(df_bitinicidencias1['FechaAlta'], format='%d/%m/%Y')
+            df_bitinicidencias1['FechaAlta'] = pd.to_datetime(df_bit_asistencia1['Fecha'])
             df_bitinicidencias1 = df_bitinicidencias1[
                 (df_bitinicidencias1['FechaAlta'] >= date1) & (df_bitinicidencias1['FechaAlta'] <= date2)
             ]
@@ -490,13 +489,13 @@ else:
 
     # #------------------------------------------------------------------------------Incidencias Numero
 
-        # #Incidencias por Mes
-        #Retorno de las Funciones de los Graficos:
-        if selected=="Home":
-            gra1()
-            gra2()
-            gra3()
-            gra4()
+    # #Incidencias por Mes
+    #Retorno de las Funciones de los Graficos:
+    if selected=="Home":
+        gra1()
+        gra2()
+        gra3()
+        gra4()
 
                 #Graficas:
             #     Incidecias por Mes . barras verticales #Echa
@@ -508,4 +507,3 @@ else:
 
 #---------------------------------------------------------------------------------------------·#
 #Salida del Inicio de Sesion:
-
