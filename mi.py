@@ -106,4 +106,157 @@ else:
     
     # Obtener IdEmpresa y Nombre del usuario autenticado
 # Obtener los datos del usuario autenticado
-    st.write( st.session_state['user_data'])
+    user_data = st.session_state['user_data']
+    # Botón de salida
+    if st.button("Logout"):
+        st.session_state['authenticated'] = False
+        st.session_state['user_data'] = None
+        st.success("You have been logged out.")
+
+    # Aquí puedes continuar con el resto de tu código para mostrar el contenido
+    # Contenido del dashboard
+    st.subheader("📈 Business Analytics Dashboard")
+    selected = option_menu(
+        menu_title=None,
+        options=["Home"],
+        icons=["house"],
+        menu_icon="cast",
+        default_index=0,
+        orientation="horizontal",
+    )
+
+    
+
+    # Extraer NombreEmpresa y Filtro 
+    NombreEmpresa = user_data['NombreEmpresa']
+    df_merged = df_merged[df_merged['Nombre_emp'] == NombreEmpresa]
+    # Entrada de texto para buscar en las columnas Nombre_dep y Nombre_pues
+    search_term = st.text_input('Buscar:')
+
+    # Filtrar los datos según el término de búsqueda y el IdEmpresa del usuario autenticado
+    if search_term:
+        filtered_df = df_merged[
+            ((df_merged['Nombre_dep'].str.contains(search_term, case=False, na=False)) |
+            (df_merged['Nombre'].str.contains(search_term, case=False, na=False)) |
+            (df_merged['Nombre_emp'].str.contains(search_term, case=False, na=False)))
+        ]
+    else:
+        filtered_df = df_merged
+    # Crear columnas para los selectbox
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        # Selectbox para seleccionar la empresa
+        empresa = st.selectbox('Empresa:', filtered_df['Nombre_emp'].unique())
+        # Filtrar los datos según la empresa seleccionada
+        datos_filtrados_empresa = filtered_df[filtered_df['Nombre_emp'] == empresa]
+
+    with col2:
+        # Selectbox para seleccionar la sede
+        sede = st.selectbox('Sede:', datos_filtrados_empresa['Nombre'].unique())
+        # Filtrar los datos según la sede seleccionada
+        datos_filtrados_sede = datos_filtrados_empresa[datos_filtrados_empresa['Nombre'] == sede]
+
+    with col3:
+        # Selectbox para seleccionar el departamento
+        dep = st.selectbox('Departamento:', datos_filtrados_sede['Nombre_dep'].unique())
+        # Filtrar los datos según el departamento seleccionado
+        datos_filtrados_dep = datos_filtrados_sede[datos_filtrados_sede['Nombre_dep'] == dep]
+    #*--------------------------------------------------------------------------------Horario
+    
+    bit_asistencia = pd.read_csv('vBitAsistencias.csv')
+
+    #Seleccion de Filtro--------
+    datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
+    # Filtrar df_bit_asistencia según los datos finales seleccionados
+    empleados_ids = datos_filtrados_dep['IdDepartamento'].unique()
+    bit_asistencia = bit_asistencia[bit_asistencia['IdDepartamento'].isin(empleados_ids)]
+
+    #FiltrodeFechas
+    bit_asistencia['Fecha'] = pd.to_datetime(bit_asistencia['Fecha'], errors='coerce')
+    bit_asistencia = bit_asistencia[
+        (bit_asistencia['Fecha'] >= date1) & (bit_asistencia['Fecha'] <= date2)
+    ]
+
+    # Contar las incidencias
+    conteos = bit_asistencia['Calificacion'].value_counts().to_dict()
+
+    # Crear columnas para las métricas
+    col1, col2, col3, col4, col5 = st.columns(5)
+
+    with col1:
+        st.metric(label="Falta", value=conteos.get('Falta', 0))
+
+    with col2:
+        st.metric(label="Asistencia", value=conteos.get('Asistencia', 0))
+
+    with col3:
+        st.metric(label="Descanso", value=conteos.get('Descanso', 0))
+
+    with col4:
+        st.metric(label="Retardo", value=conteos.get('Retardo', 0))
+
+    with col5:
+        st.metric(label="Justificación", value=conteos.get('Justificacion', 0))
+
+
+    # #-------------------------------------------------------------------------Numero de Empledos = Primera Tira de Graficas
+
+
+    # Función para gráficos de pie y barras
+    def gra1():
+        # Crea tres columnas
+        div1 = st.columns(1)
+        # Gráfico circular en la primera columna
+        with div1:
+            df_bit_asistencia1=pd.read_csv('vBitAsistencias.csv')
+
+            datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
+            # Filtrar df_bit_asistencia según los datos finales seleccionados
+            empleados_ids = datos_filtrados_dep['IdDepartamento'].unique()
+            df_bit_asistencia1 = df_bit_asistencia1[df_bit_asistencia1['IdDepartamento'].isin(empleados_ids)]
+
+            # Sincronizamos las fechas:
+            df_bit_asistencia1['Fecha'] = df_bit_asistencia1['Fecha'] = pd.to_datetime(df_bit_asistencia1['Fecha'])
+            df_bit_asistencia1 = df_bit_asistencia1[
+                (df_bit_asistencia1['Fecha'] >= date1) & (df_bit_asistencia1['Fecha'] <= date2)
+            ]
+            
+
+            # Contar las calificaciones
+            conteos1 = df_bit_asistencia1['Calificacion'].value_counts().to_dict()
+
+            # Asegurar que todos los tipos de calificación estén presentes en el diccionario
+            conteos_completos = {'Asistencia': 0, 'Falta': 0, 'Descanso': 0}
+            conteos_completos.update(conteos1)
+            # Crear un DataFrame con los valores calculados
+            data_consultas = {
+                'Tipo': ['Asistencia', 'Faltas', 'Descansos'],
+                'Cantidad': [conteos_completos['Asistencia'], conteos_completos['Falta'],conteos_completos['Descanso']]
+            }
+
+            df_consultas = pd.DataFrame(data_consultas)
+
+            # bit_asistencia_filtrada = df_consultas[df_consultas['IdDepartamento'].isin(empleados_ids)]
+            # st.write(df_consultas = pd.DataFrame(data_consultas))
+            # Crear un gráfico circular con los datos
+            fig = px.pie(
+                df_consultas,
+                names='Tipo',
+                values='Cantidad',
+                title='Tipo Consultas',
+                labels={'Cantidad': 'Número de Consultas', 'Tipo': 'Cantidad'}
+            )
+
+        
+
+            fig.update_layout(
+                title_font_size=24,
+                legend_title='Cantidad',
+                legend_font_size=14,
+                width=400,  # Ajustar el ancho de la gráfica
+                height=600  # Ajustar el alto de la gráfica
+            )
+
+            # Mostrar el gráfico en Streamlit
+            st.plotly_chart(fig)
