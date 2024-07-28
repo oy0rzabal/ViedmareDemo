@@ -144,6 +144,32 @@ else:
         dep = st.selectbox('Departamento:', datos_filtrados_sede['Nombre_dep'].unique())
         # Filtrar los datos según el departamento seleccionado
         datos_filtrados_dep = datos_filtrados_sede[datos_filtrados_sede['Nombre_dep'] == dep]
+
+    #*--------------------------------------------------------------------------------Horario
+    
+    horaa = pd.read_csv('CatEmpleados.csv')
+    #Seleccion de Filtro--------
+    datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
+    # Filtrar df_bit_asistencia según los datos finales seleccionados
+    empleados_ids = datos_filtrados_dep['IdDepartamento'].unique()
+
+    horaa = horaa[horaa['IdDepartamento'].isin(empleados_ids)]
+    # #Seleccion de Fechas:
+    fe1, fe2= st.columns((2))
+    horaa['FechaAlta']=pd.to_datetime(horaa['FechaAlta'])
+    # #DataFrame
+
+    # #Getting the min and maz date
+    startDate=pd.to_datetime(horaa['FechaAlta']).min()
+    endDate=pd.to_datetime(horaa['FechaAlta']).max()
+
+    with fe1:
+        date1=pd.to_datetime(st.date_input("Inicio", startDate))
+    with fe2:
+        date2=pd.to_datetime(st.date_input("Fin", endDate))
+    #Ponemos en orgen las Fechas:
+    hora=horaa['FechaAlta'][(horaa['FechaAlta'] >= date1) & (horaa['FechaAlta']<= date2)].copy()
+
     #*--------------------------------------------------------------------------------Horario
     
     bit_asistencia = pd.read_csv('vBitAsistencias.csv')
@@ -188,7 +214,7 @@ else:
     # Función para gráficos de pie y barras
     def gra1():
         # Crea tres columnas
-        div1 = st.columns(1)
+        div1, div2 = st.columns(2)
         # Gráfico circular en la primera columna
         with div1:
             df_bit_asistencia1=pd.read_csv('vBitAsistencias.csv')
