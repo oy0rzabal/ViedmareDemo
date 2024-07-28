@@ -107,25 +107,7 @@ else:
     # Obtener IdEmpresa y Nombre del usuario autenticado
 # Obtener los datos del usuario autenticado
     user_data = st.session_state['user_data']
-    # Botón de salida
-    if st.button("Logout"):
-        st.session_state['authenticated'] = False
-        st.session_state['user_data'] = None
-        st.success("You have been logged out.")
-
-    # Aquí puedes continuar con el resto de tu código para mostrar el contenido
-    # Contenido del dashboard
-    st.subheader("📈 Business Analytics Dashboard")
-    selected = option_menu(
-        menu_title=None,
-        options=["Home"],
-        icons=["house"],
-        menu_icon="cast",
-        default_index=0,
-        orientation="horizontal",
-    )
-
-    
+   
 
     # Extraer NombreEmpresa y Filtro 
     NombreEmpresa = user_data['NombreEmpresa']
