@@ -268,6 +268,35 @@ else:
 
             # Mostrar el gráfico en Streamlit
             st.plotly_chart(fig)
+    def gra2():
+        gra2, gra3 = st.columns(2)
+        # Gráfico de barras simple Incidencias por Mes
+        with gra2:
+            # CIncidencias
+           
+            incidencias = pd.read_csv('vBitIncidencias.csv')
+            
+            # Convertir la columna FechaAlta a datetime
+            incidencias['FechaAlta'] = pd.to_datetime(incidencias['FechaAlta'])
+
+            # Separar la fecha y la hora en columnas diferentes
+            incidencias['Fecha'] = incidencias['FechaAlta'].dt.date
+            incidencias['Hora'] = incidencias['FechaAlta'].dt.time
+            st.write(incidencias[['Nombre', 'Observaciones', 'Fecha']])
+            # Contar los tipos de datos distintos y sus frecuencias
+
+            
+
+        with gra3:
+            value_counts = incidencias['Nombre'].value_counts().reset_index()
+            value_counts.columns = ['Nombre', 'Frecuencia']
+
+            # Graficar con plotly
+            fig = px.bar(value_counts, x='Nombre', y='Frecuencia', title='Frecuencia de Tipos de Datos en la Columna Nombre')
+
+            # Mostrar en Streamlit
+            st.title('Frecuencia de Tipos de Datos')
+            st.plotly_chart(fig)
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------#
     if selected=="Home":
