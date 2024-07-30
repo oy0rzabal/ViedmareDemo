@@ -273,10 +273,7 @@ else:
             # Suponiendo que ya has ejecutado la consulta y tienes el DataFrame CAEmpleado
             CAEmpleado =pd.read_csv('CatEmpleados.csv')
 
-            datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
-            empleados_ids = datos_filtrados_dep['IdDepartamento'].unique()
-
-            CAEmpleado = CAEmpleado[CAEmpleado['IdDepartamento'].isin(empleados_ids)].copy()
+            
 
             # Aplicar las condiciones de filtrado de Personal Activado
             activado = CAEmpleado[(CAEmpleado['IdEmpresa'] == 7) & (CAEmpleado['IdStatus'] == 1)]
