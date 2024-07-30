@@ -268,6 +268,46 @@ else:
 
             # Mostrar el gráfico en Streamlit
             st.plotly_chart(fig)
+        
+        with div2:
+            # Suponiendo que ya has ejecutado la consulta y tienes el DataFrame CAEmpleado
+            CAEmpleado =pd.read_csv('CatEmpleados.csv')
+
+            datos_filtrados_dep = df_merged[df_merged['Nombre_dep'] == dep]
+            empleados_ids = datos_filtrados_dep['IdDepartamento'].unique()
+
+            CAEmpleado = CAEmpleado[CAEmpleado['IdDepartamento'].isin(empleados_ids)].copy()
+
+            # Aplicar las condiciones de filtrado de Personal Activado
+            activado = CAEmpleado[(CAEmpleado['IdEmpresa'] == 7) & (CAEmpleado['IdStatus'] == 1)]
+            count_activado = activado['IdStatus'].count()
+
+            # Aplicar las condiciones de filtrado de Personal Desactivado
+            desactivado = CAEmpleado[(CAEmpleado['IdEmpresa'] == 7) & (CAEmpleado['IdStatus'] == 0)]
+            count_desactivado = desactivado['IdStatus'].count()
+
+            st.title('Gráfico de Personal')
+
+            # Crear la gráfica de barras con Plotly
+            fig = go.Figure()
+
+            fig.add_trace(go.Bar(
+                x=['Activado', 'Desactivado'],
+                y=[count_activado, count_desactivado],
+                marker_color=['green', 'red']  # Colores verde y rojo
+            ))
+
+            fig.update_layout(
+                yaxis_title='Cantidad',
+                title_font_size=15,
+                width=500,  # Ajustar el ancho de la gráfica (puedes cambiar este valor según tus necesidades)
+                height=500  # Ajustar el alto de la gráfica (puedes cambiar este valor según tus necesidades)
+            )
+
+            # Mostrar la gráfica en Streamlit
+            st.plotly_chart(fig)
+
+    
     def gra2():
         gra2, gra3 = st.columns(2)
         # Gráfico de barras simple Incidencias por Mes
