@@ -338,7 +338,7 @@ else:
     def gra3():
         gd, g2 = st.columns(2)
         with gd:
-            Emle1=pd.read_csv('CatEmpleados')
+            Emle1=pd.read_csv('CatEmpleados.csv')
             
 
             Emle1=Emle1[['IdDepartamento','IdStatus','Sexo','IdEmpresa']]
