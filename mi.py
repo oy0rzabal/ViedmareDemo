@@ -335,7 +335,54 @@ else:
             st.title('Frecuencia de Tipos de Datos')
             st.plotly_chart(fig)
 
+    def gra3():
+        gd, g2 = st.columns(2)
+        with gd:
+            Emle1=pd.read_csv('CatEmpleados')
+            
+
+            Emle1=Emle1[['IdDepartamento','IdStatus','Sexo','IdEmpresa']]
+
+                    # Convertir valores True/False a 1/0 en IdStatus
+            Emle1['IdStatus'] = Emle1['IdStatus'].replace({True: 1, False: 0})
+
+            # Filtrar el DataFrame según las condiciones especificadas
+            filtro1 = (Emle1['IdEmpresa'] == 7.0) & (Emle1['IdStatus'] == 1) & (Emle1['Sexo'] == 1)
+            filtro2 = (Emle1['IdEmpresa'] == 7.0) & (Emle1['IdStatus'] == 1) & (Emle1['Sexo'] == 2)
+            CatEmpleado_filtrado = Emle1[filtro1]
+            CatEmpleado_filtrado1 = Emle1[filtro2]
+
+            # Contar el número de filas que cumplen con las condiciones
+            h = CatEmpleado_filtrado.shape[0]
+            m = CatEmpleado_filtrado1.shape[0]
+
+            data_consultas = {
+                'Tipo': ['Hombres', 'Mujeres'],
+                'Cantidad': [h, m]
+            }
+            df_consultas = pd.DataFrame(data_consultas)
+
+            # Crear un gráfico circular con los datos
+            fig = px.pie(
+                df_consultas,
+                names='Tipo',
+                values='Cantidad',
+                title='Numero de Personal',
+                labels={'Cantidad': 'Número de Consultas', 'Tipo': 'Tipo de Consulta'},
+                color_discrete_map={'Hombres': 'blue', 'Mujeres': 'pink'}  # Colores personalizados
+            )
+
+            fig.update_layout(
+                title_font_size=24,
+                legend_title='Tipo de Sexo',
+                legend_font_size=14,
+                width=400,  # Ajustar el ancho de la gráfica
+                height=600  # Ajustar el alto de la gráfica
+            )
+            st.plotly_chart(fig)
+
 #------------------------------------------------------------------------------------------------------------------------------------------------------#
     if selected=="Home":
             gra1()
             gra2()
+            gra3()
